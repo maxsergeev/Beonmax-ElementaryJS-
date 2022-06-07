@@ -1,6 +1,5 @@
 let menu = document.querySelector('.menu');
 let menuItem = document.getElementsByClassName('menu-item');
-console.log(menuItem);
 
 let li = document.createElement('li')
 
@@ -13,7 +12,6 @@ menu.insertBefore(menuItem[1], menuItem[3]);
 
 //смена заголовка
 let title = document.getElementById('title');
-console.log(title);
 title.innerHTML = "Мы продаем только подлинную технику Apple"
 
 //замена картинки
