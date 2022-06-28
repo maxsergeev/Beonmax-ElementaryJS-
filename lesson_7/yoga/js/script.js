@@ -1,3 +1,5 @@
+//tabs
+
 window.addEventListener("DOMContentLoaded", () => {
     `use strict`;
     let tab = document.querySelectorAll('.info-header-tab');
@@ -34,3 +36,47 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     })
 })
+
+//timer
+
+let deadline = '2022-06-30';
+
+function getTimeRemaining(endtime) {
+    let t = Date.parse(endtime) - Date.parse(new Date());
+    let seconds = Math.floor((t / 1000) % 60);
+    let minutes = Math.floor((t / 1000 / 60) % 60);
+    let hours = Math.floor((t / 1000 / 60 / 60));
+
+    return {
+        'total': t,
+        'seconds': seconds,
+        'minutes': minutes,
+        'hours': hours,
+    }
+}
+
+function setClock(clockName, endTime) {
+    let timer = document.getElementById(clockName);
+    console.log(timer);
+    let seconds = timer.querySelector('.seconds');
+    let minutes = timer.querySelector('.minutes');
+    let hours = timer.querySelector('.hours');
+
+    let interval = setInterval(updateTime, 1000);
+
+    function updateTime() {
+        let t = getTimeRemaining(endTime);
+        seconds.textContent = t.seconds < 10 ? '0' + t.seconds : t.seconds;
+        minutes.textContent = t.minutes < 10 ? '0' + t.minutes : t.minutes;
+        hours.textContent = t.hours < 10 ? '0' + t.hours : t.hours;
+
+        if (t.total <= 0) {
+            clearInterval(interval);
+            seconds.textContent = "00";
+            minutes.textContent = "00";
+            hours.textContent = "00";
+        }
+    }
+}
+
+setClock('timer', deadline);
