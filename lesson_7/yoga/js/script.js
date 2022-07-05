@@ -80,3 +80,38 @@ function setClock(clockName, endTime) {
 }
 
 setClock('timer', deadline);
+
+//modal
+let more = document.querySelector('.more');
+let overlay = document.querySelector('.overlay');
+let closeBtn = document.querySelector('.popup-close');
+
+more.addEventListener('click', () => {
+    overlay.style.display = 'block';
+    more.classList.add('more-splash');
+    document.body.style.overflow = 'hidden';
+});
+
+closeBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    more.classList.remove('more-splash');
+    document.body.style.overflow = '';
+});
+
+function openModal() {
+    let descriptionBtn = document.querySelectorAll('.description-btn');
+    descriptionBtn.forEach((item) => {
+        item.addEventListener('click', () => {
+            overlay.style.display = 'block';
+            more.classList.remove('more-splash');
+            document.body.style.overflow = '';
+        });
+    })
+    closeBtn.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+}
+
+openModal();
