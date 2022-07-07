@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
     let tabContent = document.querySelectorAll('.info-tabcontent');
 
 
-    function hideTabContent(a) {
+    const hideTabContent = (a) => {
         for (let i = a; i < tabContent.length; i++) {
             tabContent[i].classList.remove('show');
             tabContent[i].classList.add('hide');
@@ -16,14 +16,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     hideTabContent(1);
 
-    function showTabContent(b) {
+    const showTabContent = (b) => {
         if (tabContent[b].classList.contains('hide')) {
             tabContent[b].classList.remove('hide');
             tabContent[b].classList.add('show');
         }
     }
 
-    info.addEventListener('click', function(event) {
+    info.addEventListener('click', (event) => {
         let target = event.target;
         if (target && target.classList.contains('info-header-tab')) {
             for (let i = 0; i < tab.length; i++) {
@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 let deadline = '2022-06-30';
 
-function getTimeRemaining(endtime) {
+const getTimeRemaining = (endtime) => {
     let t = Date.parse(endtime) - Date.parse(new Date());
     let seconds = Math.floor((t / 1000) % 60);
     let minutes = Math.floor((t / 1000 / 60) % 60);
@@ -55,7 +55,7 @@ function getTimeRemaining(endtime) {
     }
 }
 
-function setClock(clockName, endTime) {
+const setClock = (clockName, endTime) => {
     let timer = document.getElementById(clockName);
     console.log(timer);
     let seconds = timer.querySelector('.seconds');
@@ -64,7 +64,7 @@ function setClock(clockName, endTime) {
 
     let interval = setInterval(updateTime, 1000);
 
-    function updateTime() {
+    const updateTime = () => {
         let t = getTimeRemaining(endTime);
         seconds.textContent = t.seconds < 10 ? '0' + t.seconds : t.seconds;
         minutes.textContent = t.minutes < 10 ? '0' + t.minutes : t.minutes;
@@ -98,7 +98,7 @@ closeBtn.addEventListener('click', () => {
     document.body.style.overflow = '';
 });
 
-function openModal() {
+const openModal = () => {
     let descriptionBtn = document.querySelectorAll('.description-btn');
     descriptionBtn.forEach((item) => {
         item.addEventListener('click', () => {
