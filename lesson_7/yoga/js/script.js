@@ -224,4 +224,47 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
+
+    //calc
+
+    let persons = document.querySelectorAll('.counter-block-input')[0],
+        restDays = document.querySelectorAll('.counter-block-input')[1],
+        place = document.getElementById('select'),
+        totalValue = document.getElementById('total'),
+
+        personsSum = 0,
+        daysSum = 0,
+        total = 0;
+
+    totalValue.innerHTML = 0;
+    persons.addEventListener('change', (e) => {
+        personsSum = e.target.value;
+        total = (daysSum + personsSum) * 4000;
+
+        if (restDays.value == "" || persons.value == "") {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+    restDays.addEventListener('change', (e) => {
+        daysSum = e.target.value;
+        total = (daysSum + personsSum) * 4000;
+
+        if (restDays.value == "" || persons.value == "" || restDays.value == 0 || persons.value == 0) {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+    place.addEventListener('change', (e) => {
+        if (restDays.value == "" || persons.value == "") {
+            totalValue.innerHTML = 0;
+        } else {
+            let a = total;
+            totalValue.innerHTML = a * e.target.options[e.target.selectedIndex].value;
+        }
+    })
 });
