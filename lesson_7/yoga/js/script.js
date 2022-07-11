@@ -57,7 +57,6 @@ const getTimeRemaining = (endtime) => {
 
 const setClock = (clockName, endTime) => {
     let timer = document.getElementById(clockName);
-    console.log(timer);
     let seconds = timer.querySelector('.seconds');
     let minutes = timer.querySelector('.minutes');
     let hours = timer.querySelector('.hours');
@@ -117,7 +116,7 @@ const openModal = () => {
 
 openModal();
 
-//form
+// //form
 let message = {
     loading: 'Загрузка...',
     success: 'Спасибо! Скоро мы с Вами свяжемся!',
@@ -125,71 +124,93 @@ let message = {
 }
 
 let form = document.querySelector('.main-form');
-let input = form.getElementsByTagName('input');
+let contactsForm = document.querySelector('form');
+
+let input = document.getElementsByTagName('input');
+
+// form.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     form.appendChild(statusMessage);
+
+//     let request = new XMLHttpRequest();
+//     request.open('POST', 'server.php');
+//     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+//     let formData = new FormData(form);
+//     let obj = {};
+//     formData.forEach((value, key) => {
+//         obj[key] = value;
+//     });
+//     console.log(obj);
+//     let json = JSON.stringify(obj)
+//     request.send(json);
+
+//     request.addEventListener('readystatechange', () => {
+//         if (request.readyState < 4) {
+//             statusMessage.innerHTML = message.loading;
+//         } else if (request.readyState === 4 && request.status === 200) {
+//             statusMessage.innerHTML = message.success;
+//         } else {
+//             statusMessage.innerHTML = message.error;
+//         }
+//     })
+
+//     for (let i = 0; i < input.length; i++) {
+//         input[i].value = ''
+//     }
+// });
+
+//contacts-form
+
 let statusMessage = document.createElement('div');
 statusMessage.classList.add('satus');
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    form.appendChild(statusMessage);
+const sendForm = (element) => {
+    element.addEventListener('submit', (e) => {
+        e.preventDefault();
+        element.appendChild(statusMessage);
 
-    let request = new XMLHttpRequest();
-    request.open('POST', 'server.php');
-    request.setRequestHeader('Content-Type', 'application/x-www-from-urlencoded');
+        let formData = new FormData(element);
+        let obj = {};
+        formData.forEach((value, key) => {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
 
-    let formData = new FormData(form);
-    let obj = {};
-    formData.forEach((value, key) => {
-        obj[key].value;
-    });
-    let json = JSON.stringify(obj)
-    request.send(json);
+        const postData = (data) => {
+            return new Promise((resolve, reject) => {
+                let request = new XMLHttpRequest();
+                request.open('POST', 'server.php');
+                request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-    request.addEventListener('readystatechange', () => {
-        if (request.readyState < 4) {
-            statusMessage.innerHTML = message.loading;
-        } else if (request.readyState === 4 && request.status === 200) {
-            statusMessage.innerHTML = message.success;
-        } else {
-            statusMessage.innerHTML = message.error;
+                request.onreadystatechange(() => {
+                    if (request.readyState < 4) {
+                        resolve("...Отправка заявки");
+                    } else if (request.readyState === 4 && request.staus === 200) {
+                        resolve("Заявка успешно отправлена!");
+                    } else {
+                        reject("Ошибка отправки, пожалуйста, повторите заявку еще раз!")
+                    }
+                })
+
+                request.send(data);
+            })
         }
+
+        const clearInput = () => {
+            for (let i = 0; i < input.length; i++) {
+                input[i].value = '';
+            }
+        }
+
+        postData(json)
+            .then(() => statusMessage.innerHTML = message.loading)
+            .then(() => statusMessage.innerHTML = message.success)
+            .catch(() => statusMessage.innerHTML = message.error)
+            .then(() => clearInput());
+
     })
+}
 
-    for (let i = 0; i < input.length; i++) {
-        input[i].value = ''
-    }
-});
-
-//contacts-form
-let contactsForm = document.getElementById('form');
-let contactsInput = contactsForm.getElementsByTagName('input');
-console.log(contactsInput);
-contactsForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    form.appendChild(statusMessage);
-
-    let request = new XMLHttpRequest();
-    request.open('POST', 'server.php');
-    request.setRequestHeader('Content-Type', 'application/x-www-from-urlencoded');
-    let obj = {};
-    formData.forEach((value, key) => {
-        obj[key].value;
-    });
-    let json = JSON.stringify(obj);
-    request.send(json);
-    request.addEventListener('readystatechange', () => {
-        if (request.readyState < 4) {
-            statusMessage.innerHTML = message.loading;
-        } else if (request.readyState === 4 && request.status === 200) {
-            statusMessage.innerHTML = message.success;
-        } else {
-            statusMessage.innerHTML = message.error;
-        }
-    })
-
-    for (let i = 0; i < contactsInput.length; i++) {
-        for (let j = 0; j < contactsInput[i].length; j++) {
-            contactsInput[i][j].value
-        }
-    }
-})
+sendForm(form);
+sendForm(contactsForm);
