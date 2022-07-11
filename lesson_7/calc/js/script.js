@@ -1,25 +1,38 @@
-let inputRub = document.getElementById('rub');
-let inputUsd = document.getElementById('usd');
+let inputRub = document.getElementById('rub'),
+    inputUsd = document.getElementById('usd');
+
 
 inputRub.addEventListener('input', () => {
-    let request = new XMLHttpRequest();
 
-    request.open('GET', 'js/current.json', true);
-    request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    request.send();
+    const getData = () => {
+        return new Promise((resolve, reject) => {
+            let request = new XMLHttpRequest();
+            request.open('GET', 'js/current.json');
+            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-    //status
-    //statusText
-    //responseText / response
-    //readyState
+            request.onreadystatechange = () => {
+                // if (request.readyState < 4) {
+                //     resolve();
+                // }
+                if (request.readyState === 4) {
+                    if (request.status === 200 && request.status < 300) {
+                        resolve(request.response);
+                    } else {
+                        reject(Error("Order nor send!!!"));
+                    }
+                }
+            };
+            request.send();
+        });
+    }
 
-    request.addEventListener('readystatechange', () => {
-        if (request.readyState === 4 && request.status === 200) {
-            let data = JSON.parse(request.response)
-
+    getData()
+        // .then(() => { console.log("В ожидании...") })
+        .then((response) => {
+            let data = JSON.parse(response);
             inputUsd.value = inputRub.value / data.usd;
-        } else {
-            inputUsd.value = "Что-то пошло не так";
-        }
-    })
-})
+        })
+        .catch(() => {
+            inputUsd.value = "Что-то пошло не так!";
+        })
+});

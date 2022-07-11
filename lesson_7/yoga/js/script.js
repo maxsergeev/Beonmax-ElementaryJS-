@@ -127,6 +127,7 @@ let form = document.querySelector('.main-form');
 let contactsForm = document.querySelector('form');
 
 let input = document.getElementsByTagName('input');
+//contacts-form
 
 let statusMessage = document.createElement('div');
 statusMessage.classList.add('satus');
@@ -137,11 +138,6 @@ const sendForm = (element) => {
         element.appendChild(statusMessage);
 
         let formData = new FormData(element);
-        let obj = {};
-        formData.forEach((value, key) => {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);
 
         const postData = (data) => {
             return new Promise((resolve, reject) => {
@@ -149,15 +145,15 @@ const sendForm = (element) => {
                 request.open('POST', 'server.php');
                 request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-                request.onreadystatechange(() => {
+                request.onreadystatechange = () => {
                     if (request.readyState < 4) {
-                        resolve("...Отправка заявки");
+                        resolve();
                     } else if (request.readyState === 4 && request.staus === 200) {
-                        resolve("Заявка успешно отправлена!");
+                        resolve();
                     } else {
-                        reject("Ошибка отправки, пожалуйста, повторите заявку еще раз!")
+                        reject();
                     }
-                })
+                }
 
                 request.send(data);
             })
@@ -169,7 +165,7 @@ const sendForm = (element) => {
             }
         }
 
-        postData(json)
+        postData(formData)
             .then(() => statusMessage.innerHTML = message.loading)
             .then(() => statusMessage.innerHTML = message.success)
             .catch(() => statusMessage.innerHTML = message.error)
